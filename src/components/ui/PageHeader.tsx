@@ -3,18 +3,18 @@ import styles from './PageHeader.module.css';
 
 export default function PageHeader({
   title,
-  subtitle,
+  description,
   actions,
 }: {
   title: string;
-  subtitle?: string;
+  description?: string;
   actions?: ReactNode;
 }) {
   return (
     <div className={styles.header}>
       <div>
         <h1 className={styles.title}>{title}</h1>
-        {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
+        {description ? <p className={styles.desc}>{description}</p> : null}
       </div>
       {actions ? <div className={styles.actions}>{actions}</div> : null}
     </div>
