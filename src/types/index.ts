@@ -1,117 +1,150 @@
-export type Role = 'Admin' | 'Recruiter' | 'HiringManager' | 'Interviewer';
+// Core domain types for the ATS app
 
-export type User = {
+export type Role = 'Admin' | 'Recruiter' | 'HiringManager';
+
+export interface User {
   id: string;
   name: string;
   email: string;
   role: Role;
-  active: boolean;
-};
+}
 
-export type JobStatus = 'draft' | 'open' | 'closed';
-export type JobVisibility = 'public' | 'private';
-export type EmploymentType = 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
+export type JobStatus = 'Open' | 'OnHold' | 'Closed' | 'Draft';
+export type EmploymentType = 'FullTime' | 'PartTime' | 'Contract' | 'Internship';
 
-export type Stage = {
+export interface JobStage {
   id: string;
   name: string;
   order: number;
-};
+}
 
-export type Job = {
+export interface Job {
   id: string;
   title: string;
   department: string;
   location: string;
-  description: string;
   employmentType: EmploymentType;
-  visibility: JobVisibility;
   status: JobStatus;
-  stages: Stage[];
-  assignedRecruiterId?: string;
-  hiringManagerId?: string;
+  description: string;
+  requirements: string[];
+  ownerId: string;
+  recruiterIds: string[];
+  hiringManagerIds: string[];
+  stages: JobStage[];
   createdAt: string;
-};
+  publishedToCareers: boolean;
+}
 
-export type Candidate = {
+export interface Candidate {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  summary?: string;
+  tags?: string[];
+  resumeUrl?: string;
+  source?: string;
+  createdAt: string;
+}
+
+export type ApplicationStatus = 'Active' | 'Hired' | 'Rejected' | 'Withdrawn';
+
+export interface Application {
+  id: string;
+  candidateId: string;
+  jobId: string;
+  stageId: string;
+  status: ApplicationStatus;
+  rating?: number;
+  createdAt: string;
+  source?: string;
+  notes?: ApplicationNote[];
+}
+
+export interface ApplicationNote {
+  id: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+}
+
+export type InterviewType = 'Phone' | 'Video' | 'Onsite' | 'Technical';
+export type InterviewStatus = 'Scheduled' | 'Completed' | 'Cancelled';
+
+export interface Interview {
+  id: string;
+  applicationId: string;
+  scheduledAt: string;
+  durationMinutes: number;
+  type: InterviewType;
+  status: InterviewStatus;
+  interviewerIds: string[];
+  location?: string;
+  notes?: string;
+  feedback?: InterviewFeedback[];
+}
+
+export interface InterviewFeedback {
+  id: string;
+  interviewerId: string;
+  rating: number;
+  comments: string;
+  createdAt: string;
+}
+
+export interface EmailTemplate {
   id: string;
   name: string;
-  email: string;
-  phone: string;
-  resumeName?: string;
-  notes: Note[];
-  createdAt: string;
-};
-
-export type Application = {
-  id: string;
-  jobId: string;
-  candidateId: string;
-  stageId: string;
-  stageEnteredAt: string;
-  coverLetter?: string;
-  rejected: boolean;
-  archived: boolean;
-  history: StageHistoryEntry[];
-  createdAt: string;
-};
-
-export type StageHistoryEntry = {
-  stageId: string;
-  stageName: string;
-  enteredAt: string;
-  by?: string;
-};
-
-export type Note = {
-  id: string;
+  subject: string;
   body: string;
-  authorId: string;
-  authorName: string;
-  createdAt: string;
-};
+}
 
-export type InterviewFormat = 'In-person' | 'Phone' | 'Video';
-
-export type Interview = {
+export interface EmailMessage {
   id: string;
-  applicationId: string;
-  title: string;
-  date: string; // ISO
-  durationMinutes: number;
-  format: InterviewFormat;
-  interviewerIds: string[];
-  notes?: string;
-};
-
-export type Recommendation = 'Strong Yes' | 'Yes' | 'No' | 'Strong No';
-
-export type Scorecard = {
-  id: string;
-  interviewId: string;
-  applicationId: string;
-  interviewerId: string;
-  interviewerName: string;
-  ratings: { criterion: string; score: number }[];
-  feedback: string;
-  recommendation: Recommendation;
-  submittedAt: string;
-};
-
-export type EmailLog = {
-  id: string;
-  candidateId: string;
+  toCandidateId: string;
   applicationId?: string;
   subject: string;
   body: string;
-  to: string;
   sentAt: string;
-  trigger: 'manual' | 'application_received' | 'stage_change' | 'interview_invite' | 'rejection';
-};
+  sentByUserId: string;
+}
 
-export type ActivityEntry = {
-  id: string;
-  type: 'application' | 'stage_change' | 'interview' | 'note' | 'email' | 'hire' | 'reject';
-  message: string;
-  at: string;
-};
+export interface AtsContextValue {
+  users: User[];
+  currentUser: User;
+  setCurrentUserId: (id: string) => void;
+
+  jobs: Job[];
+  candidates: Candidate[];
+  applications: Application[];
+  interviews: Interview[];
+  emailTemplates: EmailTemplate[];
+  emails: EmailMessage[];
+
+  createJob: (data: Omit<Job, 'id' | 'createdAt' | 'stages'> & { stages?: JobStage[] }) => Job;
+  updateJob: (id: string, patch: Partial<Job>) => void;
+
+  createCandidate: (data: Omit<Candidate, 'id' | 'createdAt'>) => Candidate;
+  createApplication: (data: { candidateId: string; jobId: string; source?: string }) => Application;
+  moveApplicationStage: (applicationId: string, stageId: string) => void;
+  setApplicationStatus: (applicationId: string, status: ApplicationStatus) => void;
+  addApplicationNote: (applicationId: string, body: string) => void;
+
+  scheduleInterview: (data: Omit<Interview, 'id' | 'status' | 'feedback'>) => Interview;
+  updateInterview: (id: string, patch: Partial<Interview>) => void;
+  addInterviewFeedback: (interviewId: string, data: Omit<InterviewFeedback, 'id' | 'createdAt'>) => void;
+
+  sendEmail: (data: Omit<EmailMessage, 'id' | 'sentAt' | 'sentByUserId'>) => EmailMessage;
+
+  submitPublicApplication: (data: {
+    jobId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone?: string;
+    location?: string;
+    summary?: string;
+  }) => { candidate: Candidate; application: Application };
+}
