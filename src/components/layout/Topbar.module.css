@@ -1,0 +1,30 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.title { font-size: 18px; font-weight: 600; }
+.right { display: flex; align-items: center; gap: 16px; }
+.roleSwitcher { display: flex; align-items: center; gap: 8px; }
+.label { font-size: 12px; color: var(--color-text-muted); }
+.select {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: var(--color-surface);
+  font-size: 13px;
+}
+.avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2d5bff, #7c3aed);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}

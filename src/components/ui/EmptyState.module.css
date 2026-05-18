@@ -1,0 +1,17 @@
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--color-text-muted);
+}
+.icon {
+  display: inline-flex;
+  width: 48px; height: 48px;
+  align-items: center; justify-content: center;
+  background: var(--color-surface-alt);
+  border-radius: 50%;
+  margin-bottom: 14px;
+  color: var(--color-text-soft);
+}
+.title { font-size: 15px; font-weight: 600; color: var(--color-text); margin-bottom: 6px; }
+.desc { font-size: 13px; max-width: 380px; margin: 0 auto; }
+.action { margin-top: 16px; }

@@ -1,0 +1,69 @@
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #0e1726;
+  color: #c9d3e4;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 8px 20px;
+  border-bottom: 1px solid #1c2638;
+  margin-bottom: 16px;
+}
+.logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2d5bff, #7c3aed);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+.brandTitle { color: #fff; font-weight: 600; font-size: 15px; }
+.brandSub { color: #6b7896; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #aab4c8;
+  transition: background 0.15s, color 0.15s;
+}
+.link:hover { background: #1a2335; color: #fff; }
+.linkActive { background: #2d5bff; color: #fff; }
+.linkActive:hover { background: #2d5bff; color: #fff; }
+
+.footer {
+  border-top: 1px solid #1c2638;
+  padding-top: 14px;
+}
+.publicLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #8b97b0;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+.publicLink:hover { color: #fff; background: #1a2335; }
